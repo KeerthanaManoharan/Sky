@@ -1,11 +1,15 @@
 // SecondScreen.js
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 const FavouriteList = ({ route }) => {
   const { countriesData } = route.params;
+  const favourites = useSelector(state => state)
 
-  if (!countriesData || countriesData.length === 0) {
+  console.log("DATA",favourites,route.params)
+
+  if (!favourites || countriesData.length === 0) {
     return (
       <View>
         <Text>No data available.</Text>
@@ -15,8 +19,10 @@ const FavouriteList = ({ route }) => {
 
   const renderCountry = ({ item }) => (
     <View>
+      {
+        console.log("NAME ", item)
+      }
       <Text>{item.name.common}</Text>
-      {/* Display other country details here */}
     </View>
   );
 

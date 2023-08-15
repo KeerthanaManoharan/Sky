@@ -10,8 +10,10 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Search" component={Search} />
-        <Stack.Screen name="FavouriteList" component={FavouriteList} />
+        <Stack.Screen name="Search" component={Search}  options={{
+              headerShown: false,
+            }}/>
+        <Stack.Screen name="FavouriteList" component={FavouriteList}  />
       </Stack.Navigator>
     </NavigationContainer>
   );

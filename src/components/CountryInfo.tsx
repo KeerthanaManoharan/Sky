@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { SvgUri } from 'react-native-svg';
+import {  setFavouriteList } from './../redux/actions/favouriteCountryActions';
+import { useDispatch } from 'react-redux';
 
 interface CountryInfoProps {
   country: {
@@ -15,16 +17,23 @@ interface CountryInfoProps {
   };
 }
 const addFavourites = (country: any) => {
-
+  //if(country!=null)
+  // dispatch(setFavouriteList(country.name.common, country));
 }
 const CountryInfo: React.FC<CountryInfoProps> = ({ country, color }) => {
+
+  const dispatch = useDispatch();
+
+  const addFavourites = () => {
+    dispatch(setFavouriteList(country.name.common, country));
+  }
   return (
     <View >
       {country && country.flags &&
 
 
 
-        <TouchableOpacity style={styles.card} onPress={addFavourites(country)} >
+        <TouchableOpacity style={styles.card} onPress= {addFavourites} >
           <View style={{ flex: 0.5, flexWrap: 'wrap' }}>
             <SvgUri width="100%" height={'50%'} uri={country.flags && country.flags.svg} />
           </View>
@@ -43,10 +52,7 @@ const CountryInfo: React.FC<CountryInfoProps> = ({ country, color }) => {
                 {timezone}
               </Text>
             ))}
-
-
           </View>
-
         </TouchableOpacity>
       }
     </View>

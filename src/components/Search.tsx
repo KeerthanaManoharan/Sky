@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Keyboard, TouchableOpacity,Image } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Keyboard, TouchableOpacity, Pressable } from 'react-native';
 import CountryInfo from './../components/CountryInfo';
 import { ThemeContext } from '../theme/ThemeContextProvider';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCountryList, getCountryList } from './../redux/actions/countryDetailsActions';
-
+import { useNavigation } from '@react-navigation/native';
 const BASE_URL = 'https://restcountries.com/v3.1/name/';
-const App = ()=> { 
-   const fetchCountryData = async (countryName: string) => {
+
+const App = () => {
+  const fetchCountryData = async (countryName: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -17,7 +18,7 @@ const App = ()=> {
     } catch (error) {
       setLoading(false);
       setError(error);
-      return error;
+      return null;
     }
   };
   const dispatch = useDispatch();
@@ -29,11 +30,11 @@ const App = ()=> {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const test = useSelector(state => state)
-  // const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
 
   const handleFetchData = async () => {
-   navigation.navigate('FavouriteList', { countryData });
+    navigation.navigate('FavouriteList', { countryData });
   };
   const searchCountry = async () => {
     Keyboard.dismiss()
@@ -41,7 +42,6 @@ const App = ()=> {
       setLoading(false);
       setCountryData(test.countryInfo[countryName]);
     } else {
-
       const data = await fetchCountryData(countryName);
       dispatch(setCountryList(countryName, data));
       setCountryData(data);
@@ -54,35 +54,27 @@ const App = ()=> {
 
       <View style={[styles.header, styles.darkHeader]}>
         <View style={styles.leftSection}>
-        <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
+          <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
             <Text style={{ color: textColor }}>
               {"Dark/Light Theme"}
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity 
-        //onPress={handleWishlistPress}
-        >
-        <Image style={{
-            resizeMode: 'cover',
-            height: 50,
-            width: 25,
-          }} source={{uri: "https://images.unsplash.com/photo-1526045612212-70caf35c14df"}} />     
-           </TouchableOpacity>
       </View>
       <View style={{ margin: '2%' }}>
         <TextInput
-          style={[styles.input,{color:textColor}]}
+          style={[styles.input, { color: textColor }]}
           placeholder="Enter country name"
           value={countryName}
           onChangeText={text => setCountryName(text)}
         />
-        <Button title="Search" onPress={searchCountry} />
+          <Pressable style={styles.submitButton} onPress={searchCountry}>
+      <Text style={styles.text}>Search</Text>
+    </Pressable>
         {loading && <Text>Loading...</Text>}
         {error && <Text>{"No data found"}</Text>}
-        {countryData && <CountryInfo country={countryData} color={textColor}/>}
+        {countryData && <CountryInfo country={countryData} color={textColor} />}
       </View>
-     
     </View>
   );
 };
@@ -111,10 +103,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 20,
-    backgroundColor: '#007bff', // Change to your header background color
+    backgroundColor: 'skyblue', 
   },
   darkHeader: {
-    backgroundColor: 'teal', // Change to your dark mode header background color
+    backgroundColor: 'skyblue', 
   },
   leftSection: {
     flexDirection: 'row',
@@ -124,6 +116,25 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: '#fff',
   },
+  submitButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'skyblue',
+    position: 'absolute',
+    bottom:0,
+    alignSelf:'center'
+},
+text: {
+  fontSize: 16,
+  lineHeight: 21,
+  fontWeight: 'bold',
+  letterSpacing: 0.25,
+  alignContent:'center'
+},
 
 });
 

@@ -9,10 +9,8 @@ const favouriteReducer = (state = initialState, action) => {
         [action.payload.listName]: action.payload.countryList,
       };
       case 'GET_FAVOURITE_LIST':
-      console.log("STATE OF GET", state)
       return {
         ...state,
-        // [action.payload.listName]: action.payload.countryList,
       };
     default:
       return state;
